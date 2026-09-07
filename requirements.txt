@@ -1,0 +1,5 @@
+# 依所選 provider 安裝其一即可
+anthropic>=1.0
+google-genai
+# --docx 輸出才需要
+# python-docx

@@ -1,0 +1,10 @@
+# GitLab CI 排程產文範例：CI/CD 變數設定 LLM_PROVIDER 與對應金鑰即可換模型
+generate-docs:
+  image: python:3.11
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+  script:
+    - pip install anthropic  # LLM_PROVIDER=gemini 時改裝 google-genai
+    - python3 docpipe.py run transcripts/*.md -t meeting-minutes -o out/
+  artifacts:
+    paths: [out/]
