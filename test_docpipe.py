@@ -1,5 +1,6 @@
 """docpipe 自我測試：LLM_PROVIDER=fake，全程離線。執行：python3 test_docpipe.py"""
 import os
+import sys
 import shutil
 import tempfile
 from pathlib import Path
@@ -54,6 +55,15 @@ def main():
     finally:
         shutil.rmtree(tmp)
 
+    # eval 結構檢查器
+    sys.path.insert(0, str(Path(__file__).parent / "eval"))
+    from run_eval import check_structure
+    good = ("# 會議紀要 — x\n## 摘要\n## 討論事項\n## 決議\n|a|b|\n## 待辦\n"
+            "## 未決事項\n<!-- docpipe: x -->")
+    assert check_structure(good) == [], check_structure(good)
+    bad = "# 會議紀要\n## 摘要\n{today}"
+    probs = check_structure(bad)
+    assert any("決議" in x for x in probs) and any("佔位符" in x for x in probs)
     print("OK: all docpipe tests passed")
 
 

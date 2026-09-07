@@ -8,3 +8,4 @@ jobs:
       - uses: actions/setup-python@v5
         with: {python-version: "3.11"}
       - run: LLM_PROVIDER=fake python3 test_docpipe.py
+      - run: LLM_PROVIDER=fake python3 eval/run_eval.py --structural  # 管線煙霧測試

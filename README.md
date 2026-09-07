@@ -58,6 +58,19 @@ LLM_PROVIDER=gemini GEMINI_API_KEY=... python3 docpipe.py run meeting.txt
 - GitLab CI 排程產文範例：`examples/gitlab-ci.example.yml` —— 在 CI 變數設定 `LLM_PROVIDER` 與金鑰，
   排程觸發即自動把新逐字稿轉成文件並存為 artifact
 
+## Eval：產出品質可驗證
+
+`eval/` 是這條 pipeline 的品質基準：4 份設計過的逐字稿（正常／無決策／有衝突未決／資訊稀疏）
++ [rubric](eval/rubric.md)（結構、忠實性、決議/待辦區分、缺漏處理、可讀性）。
+
+```sh
+python3 eval/run_eval.py               # 產出 → 確定性結構檢查 → LLM judge 評分 → eval/results.md
+python3 eval/run_eval.py --structural  # 只跑確定性檢查（CI 用，離線）
+```
+
+結構完整性用程式把關、語意品質用 LLM judge 依 rubric 打分 ——
+驗證成本必須低於生產成本，pipeline 才有資格自動化。
+
 ## 測試
 
 ```sh
