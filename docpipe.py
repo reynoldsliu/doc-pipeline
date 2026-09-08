@@ -60,7 +60,10 @@ class ClaudeProvider:
         try:
             import anthropic
         except ImportError:
-            raise SystemExit("claude provider 需要 anthropic 套件：pip install anthropic")
+            raise SystemExit("claude provider 需要 anthropic 套件。\n"
+                             "  python3 -m venv .venv && .venv/bin/pip install anthropic\n"
+                             "  然後用 .venv/bin/python 執行本工具\n"
+                             "（Homebrew/系統 Python 會拒絕直接 pip install，屬正常保護機制）")
         if not (os.environ.get("ANTHROPIC_API_KEY") or os.environ.get("ANTHROPIC_AUTH_TOKEN")):
             raise SystemExit("缺少 ANTHROPIC_API_KEY（或先 `ant auth login`）")
         self.client = anthropic.Anthropic()
@@ -85,7 +88,9 @@ class GeminiProvider:
         try:
             from google import genai
         except ImportError:
-            raise SystemExit("gemini provider 需要 google-genai 套件：pip install google-genai")
+            raise SystemExit("gemini provider 需要 google-genai 套件。\n"
+                             "  python3 -m venv .venv && .venv/bin/pip install google-genai\n"
+                             "  然後用 .venv/bin/python 執行本工具")
         if not os.environ.get("GEMINI_API_KEY"):
             raise SystemExit("缺少 GEMINI_API_KEY")
         self.client = genai.Client()
@@ -115,7 +120,7 @@ def md_to_docx(md_text: str, out_path: Path) -> None:
     try:
         import docx
     except ImportError:
-        raise SystemExit("--docx 需要 python-docx 套件：pip install python-docx")
+        raise SystemExit("--docx 需要 python-docx 套件：.venv/bin/pip install python-docx")
     d = docx.Document()
     for line in md_text.splitlines():
         s = line.strip()

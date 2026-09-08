@@ -21,14 +21,15 @@
 # 零金鑰試跑（fake provider，離線）
 LLM_PROVIDER=fake python3 docpipe.py run examples/sample-transcript.md
 
-# 正式使用（Claude）
-pip install anthropic
-export ANTHROPIC_API_KEY=sk-ant-...
-python3 docpipe.py run meeting.txt -t meeting-minutes -o out/
+# 正式使用（Claude）— 建議用虛擬環境，
+# macOS 的 Homebrew/系統 Python 會拒絕直接 pip install（PEP 668）
+python3 -m venv .venv && .venv/bin/pip install anthropic
+export ANTHROPIC_API_KEY=sk-ant-...          # 建議從 keychain 讀，別寫進檔案
+.venv/bin/python docpipe.py run meeting.txt -t meeting-minutes -o out/
 
 # 換成 Gemini：只改環境變數
-pip install google-genai
-LLM_PROVIDER=gemini GEMINI_API_KEY=... python3 docpipe.py run meeting.txt
+.venv/bin/pip install google-genai
+LLM_PROVIDER=gemini GEMINI_API_KEY=... .venv/bin/python docpipe.py run meeting.txt
 ```
 
 ```
@@ -74,5 +75,5 @@ python3 eval/run_eval.py --structural  # 只跑確定性檢查（CI 用，離線
 ## 測試
 
 ```sh
-python3 test_docpipe.py   # 離線，不需任何金鑰
+python3 test_docpipe.py   # 離線，不需任何金鑰、不需任何套件
 ```
